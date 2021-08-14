@@ -1,0 +1,443 @@
+tags:
+  - name: Users
+    description: Endpoints for managing users
+
+/users:
+  get:
+    tags:
+      - Users
+    summary: get all users
+    produces:
+      - application/json
+    parameters:
+      - name: Authorization
+        in: header
+        description: Bearer {access_token}
+        required: true
+        type: string
+      - name: fields
+        in: query
+        description: Enter query-fields as 'firstName,lastName' to get only firstName, lastName, _id as response
+      - name: pageNo
+        in: query
+        description: enter page no for pagination
+        required: false
+        type: number
+      - name: pageSize
+        in: query
+        description: enter page size for pagination
+        required: false
+        type: number
+      - name: isActive
+        in: query
+        description: isActive=true to get all active users
+        required: false
+        default: false
+        type: boolean
+      - name: isVerified
+        in: query
+        description: isVerified=true to get all isVerified users
+        required: false
+        type: boolean
+      - name: isOnline
+        in: query
+        description: isOnline=true to all users that are online
+        required: false
+        type: boolean
+      - name: archived
+        in: query
+        description: archived=true to get deleted user's & archived=false to get all non deleted users
+        required: false
+        default: false
+        type: boolean
+      
+    responses:
+      200:
+        description: List of users
+        schema:
+          type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/definitions/UserResponseDTO'
+            metadata:
+              type: object
+              properties:
+                total:
+                  type: number
+                page: 
+                  type: number
+
+/users/login:
+  post:
+    tags:
+      - Users
+    summary: login(user authentication)
+    produces:
+      - application/json
+    consumes:
+      - application/json
+    parameters:
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+              format: password
+        required:
+          - email
+          - password
+    responses:
+      200:
+        description: User logged in successfully
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+            accessToken: 
+              type: string
+            tokenId:
+              type: string
+      403:
+        description: Your account marked as inActive or deactivated!, Please contact support team
+      404:
+        description: User doesn't exist
+      409: 
+        description: unauthorized
+      422:
+        description: Please reset your password
+      500: 
+        description: Internal Server error  
+
+/signup:
+  post:
+    tags:
+      - Users
+    summary: registering a new user
+    produces:
+      - application/json
+    consumes:
+      - application/json
+    parameters:
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            organizationName:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+        required:
+          - email
+          - organizationName
+          - firstName
+          - lastName
+    responses:
+      201:
+        description: ORG_USER has been created
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      500: 
+        description: Internal Server error  
+
+/users/verifyEmailAndSetPassword:
+  patch:
+    tags:
+      - Users
+    summary: Verifying a user and setting up the password
+    produces:
+      - application/json
+    parameters:
+      - name: Authorization
+        in: header
+        description: Bearer {access_token}
+        required: true
+        type: string
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            password:
+              type: string
+        required:
+          - password
+      
+    responses:
+      200:
+        description: successfully verified user address
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+            token:
+              type: string
+      400:
+        description: User has been already verified
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      500:
+        description: List of users
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+
+/users/addNewOrgUser:
+  post:
+    tags:
+      - Users
+    summary: Inviting a new org user to avinash hq
+    produces:
+      - application/json
+    parameters:
+      - name: Authorization
+        in: header
+        description: Bearer {access_token}
+        required: true
+        type: string
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            userRole:
+              type: string
+        required:
+          - email
+          - firstName
+          - lastName
+          - userRole
+      
+    responses:
+      201:
+        description: Successfully invited
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      401:
+        description: Unauthorized
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      500:
+        description: Server Error
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+
+/users/forgotPassword:
+  post:
+    tags:
+      - Users
+    summary: Forgot Password API
+    produces:
+      - application/json
+    parameters:
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+        required:
+          - email
+      
+    responses:
+      200:
+        description: Successfully Sent email
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      404:
+        description: User not found
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      500:
+        description: Server Error
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+
+/users/updatePassword:
+  post:
+    tags:
+      - Users
+    summary: Update Password API
+    produces:
+      - application/json
+    parameters:
+      - name: Authorization
+        in: header
+        description: Bearer {access_token}
+        required: true
+        type: string
+      - name: Request body
+        in: body
+        schema:
+          type: object
+          properties:
+            password:
+              type: string
+        required:
+          - password
+      
+    responses:
+      200:
+        description: Successfully Updated Password
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string
+      500:
+        description: Server Error
+        schema:
+          type: object
+          properties:
+            status:
+              type: string
+            message: 
+              type: string            
+definitions:
+  userRole: 
+    type: array
+    items:
+      type: string
+      enum: ['ORG_USER', 'ORG_ADMIN', 'SUPER_ADMIN', 'ADMIN']
+
+  UserRequestDTO:
+    properties:
+      _id:
+        type: string
+      firstName:
+        type: string
+      lastName: 
+        type: string
+      tenantId: 
+        type: string
+      email: 
+        type: string
+      password: 
+        type: string
+      userRole: 
+        $ref: '#/definitions/userRole'
+      isActive:
+        type: boolean
+      isVerified:
+        type: boolean
+      archived:
+        type: boolean
+      loginAttempts:
+        type: number
+      lockUntil:
+        type: number
+      loginHistory:
+        type: array
+        items:
+          type: number
+      isOnline:
+        type: boolean
+
+  UserResponseDTO:
+    properties:
+      _id:
+        type: string
+      firstName:
+        type: string
+      lastName: 
+        type: string
+      tenantId: 
+        type: string
+      email: 
+        type: string
+      password: 
+        type: string
+      userRole: 
+        $ref: '#/definitions/userRole'
+      isActive:
+        type: boolean
+      isVerified:
+        type: boolean
+      archived:
+        type: boolean
+      loginAttempts:
+        type: number
+      lockUntil:
+        type: number
+      loginHistory:
+        type: array
+        items:
+          type: number
+      isOnline:
+        type: boolean
+     
+
+
+
+
+  
+ 

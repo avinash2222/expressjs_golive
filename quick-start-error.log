@@ -1,0 +1,8 @@
+{"message":"Node_ENV : local","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:31"}
+{"message":"Server is running on port 8080","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:31"}
+{"message":"MongoDB :: connected to DB_NAME: avinash","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:31"}
+{"message":"Mongoose connection open to DB_URL: \"mongodb://localhost/\"","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:31"}
+{"message":"Node_ENV : local","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:39"}
+{"message":"Server is running on port 8080","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:39"}
+{"message":"MongoDB :: connected to DB_NAME: avinash","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:39"}
+{"message":"Mongoose connection open to DB_URL: \"mongodb://localhost/\"","level":"\u001b[32minfo\u001b[39m","service":"avinash-app-api","timestamp":"2021-08-14 10:37:39"}
